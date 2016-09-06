@@ -116,23 +116,22 @@ def figure7():
 	x = np.loadtxt('pjzsIncrease10,000_160901_1743_40.csv', delimiter=',', dtype='int32')
 	t = x[:,1]
 	dt = t[1:] - t[0:-1]	
-	marr = np.array([])
 	steps = np.array([])
-	i = np.arange(400)
+	i = np.arange(dt.size)
 	stdarr = np.array([])
-	nstep = 5
-	for j in i[0::nstep]:              
-		m = np.mean(dt[0:j+nstep])   
-		marr = np.append(marr,m)
-		steps = np.append(steps, j)
+	for k in i[1:400:5]:
+		steps = np.append(steps, k)
+		marr = np.array([])
+
+		for j in i[0::k]:
+			m = np.mean(dt[j:j+k])   
+			marr = np.append(marr,m)
 		mu = np.sum(marr)/np.float(marr.size)
 		std = np.sqrt(np.sum((marr - mu)**2.)/(np.float(marr.size)-1.))
 		stdarr = np.append(stdarr, std)
 
-	stdarr = stdarr[5:]
-	steps = steps[5:]
-	print(steps)
-	print(stdarr)
+	steps = steps[1:]
+	stdarr = stdarr[1:steps.size+1]
 	plt.plot(steps, stdarr,'o')
 	plt.title('Figure 6 Mean Interval for Chunks of 100 Events')
 	plt.xlabel('Start Index')
@@ -144,31 +143,31 @@ def figure8():
 	x = np.loadtxt('pjzsIncrease10,000_160901_1743_40.csv', delimiter=',', dtype='int32')
 	t = x[:,1]
 	dt = t[1:] - t[0:-1]	
-	marr = np.array([])
 	steps = np.array([])
 	i = np.arange(dt.size)
 	stdarr = np.array([])
-	nstep = 100
-	for j in i[0::nstep]:              
-		m = np.mean(dt[0:j+nstep])   
-		marr = np.append(marr,m)
-		steps = np.append(steps, (1./np.sqrt(np.float(j))))
+	for k in i[1:400:5]:
+		steps = np.append(steps, 1./np.sqrt(k))
+		marr = np.array([])
+
+		for j in i[0::k]:
+			m = np.mean(dt[j:j+k])   
+			marr = np.append(marr,m)
 		mu = np.sum(marr)/np.float(marr.size)
 		std = np.sqrt(np.sum((marr - mu)**2.)/(np.float(marr.size)-1.))
 		stdarr = np.append(stdarr, std)
 
-	stdarr = stdarr[5:]
-	steps = steps[5:]
-	linex = []
-	linex = linex.append(steps[5])
-	linex = linex.append(steps[steps.size-1])
-	liney = []
-	liney = liney.append(stdarr[5])
-	liney = liney.append(stdarr[stdarr.size-1])
-	# plt.plot(steps, stdarr,'o')
-	print(linex)
-	print(liney)
-	plt.plot(liney, linex, color="b")
+	steps = steps[1:]
+	stdarr = stdarr[1:steps.size+1]
+	linex = np.array([])
+	liney = np.array([])
+	linex = np.append(linex, steps[0])
+	linex = np.append(linex, steps[steps.size-1])
+	liney = np.append(liney, stdarr[0])
+	liney = np.append(liney, stdarr[steps.size-1])
+
+	plt.plot(steps, stdarr,'o')
+	plt.plot(linex,liney)
 	plt.title('Figure 6 Mean Interval for Chunks of 100 Events')
 	plt.xlabel('Start Index')
 	plt.ylabel('Mean Interval [Clock Ticks]')
