@@ -20,7 +20,22 @@ def main(a):
 	if '7' in a:
 		figure7()				
 	if '8' in a:
-		figure8()					
+		figure8()
+	if '9' in a:
+		figure9()
+	if '10' in a:
+		figure10()
+	if '11' in a:
+		figure11(lambda x:(1./x)*np.exp(-1.42e7/x))
+		# figure11(lambda x:-(1./-1.42e7)*np.exp(x/-1.42e7))				
+		# figure11()
+	if '12' in a:
+		figure12()
+	if '13' in a:
+		figure13()				
+	if '14' in a:
+		figure14()					
+
 
 def figure1():
 	x = np.loadtxt('pjzsIncrease10,000_160901_1743_40.csv', delimiter=',', dtype='int32')
@@ -172,6 +187,110 @@ def figure8():
 	plt.xlabel('Start Index')
 	plt.ylabel('Mean Interval [Clock Ticks]')
 	plt.ticklabel_format(style='sci',axis='y',scilimits=(0,0))
+	plt.show()
+
+
+#/////////////////////////////////////////Part 2 begins here//////////////////////////////////////////
+
+def figure9():
+	#code from figure 3
+	x = np.loadtxt('pjzsIncrease10,000_160901_1743_40.csv', delimiter=',', dtype='int32')
+	t = x[:,1]
+	dt = t[1:] - t[0:-1]
+	
+	#New code, STAAAAAAAAAAAAAAAAART
+	N = 250 #use 250 cause 500 was way too many to look pretty with. Looks clower to example figure.
+	# define the lower and upper bin edges and bin width 
+	bw = (dt.max()-dt.min())/(N-1.)
+	binl = dt.min() + bw * np.arange(N)
+
+	# define the array to hold the occurrence count
+	bincount = np.array([])# loop through the bins
+	for bin in binl:    
+		count = np.where((dt >= bin) & (dt < bin+bw))[0].size    
+		bincount = np.append(bincount,count)
+	
+	#compute bin centers for plotting
+
+	binc = binl + 0.5*bw
+	plt.figure()
+	plt.plot(binc,bincount,drawstyle='steps-mid', lw = 1.5)
+	x1,x2,y1,y2 = plt.axis()
+	plt.axis((x1,5e7,y1,2000))
+	plt.title('Figure 9 Frequency vs Interval')
+	plt.xlabel('Interval [Ticks]')
+	plt.ylabel('Frequency')
+	plt.show()
+
+def figure10():
+	#code from figure 3
+	x = np.loadtxt('pjzsIncrease10,000_160901_1743_40.csv', delimiter=',', dtype='int32')
+	t = x[:,1]
+	dt = t[1:] - t[0:-1]
+	
+	#New code, STAAAAAAAAAAAAAAAAART
+	N = 250
+	# define the lower and upper bin edges and bin width 
+	bw = (4000-dt.min())/(N-1.)
+	binl = dt.min() + bw * np.arange(N)
+	
+	# define the array to hold the occurrence count
+	bincount = np.array([])# loop through the bins
+	index = 0;
+	for bin in binl:    
+		count = np.where((dt >= bin) & (dt < bin+bw))[0].size
+		bincount = np.append(bincount,count)
+	
+	#compute bin centers for plotting
+
+	binc = binl + 0.5*bw
+	plt.figure()
+	plt.plot(binc,bincount,drawstyle='steps-mid', lw = 1.3)
+	x1,x2,y1,y2 = plt.axis()
+	plt.axis((x1,4000,y1,y2))
+	plt.title('Figure 9 Frequency vs Interval')
+	plt.xlabel('Interval [Ticks]')
+	plt.ylabel('Frequency')
+	plt.show()
+
+def figure11(maths):
+	#code from figure 3 + 5
+	x = np.loadtxt('pjzsIncrease10,000_160901_1743_40.csv', delimiter=',', dtype='int32')
+	t = x[:,1]
+	dt = t[1:] - t[0:-1]
+	m = np.mean(dt[0:dt.size-1])  
+
+	marr = np.array([])
+	i = np.arange(dt.size)
+	for j in i:              
+		m = np.mean(dt[0:j])   
+		marr = np.append(marr,m)
+
+	#New code, STAAAAAAAAAAAAAAAAART
+	N = 50
+	# define the lower and upper bin edges and bin width 
+	bw = (dt.max()-4000)/(N-1.)
+	binl = 4000 + bw * np.arange(N)
+	
+	# define the array to hold the occurrence count
+	bincount = np.array([])# loop through the bins
+	index = 0;
+	for bin in binl:    
+		count = np.where((dt >= bin) & (dt < bin+bw))[0].size
+		bincount = np.append(bincount,count)
+	
+	#compute bin centers for plotting
+
+	binc = binl + 0.5*bw
+	y = maths(marr)	
+	plt.figure()
+
+	# plt.plot(binc,bincount,drawstyle='steps-mid', lw = 1.3)
+	plt.plot(binc, y)
+	x1,x2,y1,y2 = plt.axis()
+	plt.title('Figure 9 Frequency vs Interval')
+	plt.xlabel('Interval [Ticks]')
+	plt.ylabel('Frequency')
 	plt.show()
 
 main(a)
