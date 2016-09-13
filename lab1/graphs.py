@@ -285,12 +285,41 @@ def figure11(maths):
 	y = maths(marr)	
 	plt.figure()
 
-	# plt.plot(binc,bincount,drawstyle='steps-mid', lw = 1.3)
-	plt.plot(binc, y)
+	plt.plot(binc,bincount,drawstyle='steps-mid', lw = 1.3)
+	# plt.plot(binc, y)
 	x1,x2,y1,y2 = plt.axis()
 	plt.title('Figure 9 Frequency vs Interval')
 	plt.xlabel('Interval [Ticks]')
 	plt.ylabel('Frequency')
 	plt.show()
 
+def figure12():
+	a = np.loadtxt('pjzsOff10,000_160901_1741_40.csv', delimiter=',', dtype='int32')	
+	b = np.loadtxt('pjzs1LED10,000_160901_1732_40.csv', delimiter=',', dtype='int32')	
+	c = np.loadtxt('pjzsIncrease10,000_160901_1743_40.csv', delimiter=',', dtype='int32')
+	d = np.loadtxt('pjzs3Max10,000_160901_1738_40.csv', delimiter=',', dtype='int32')
+	# e = np.loadtxt('pjzsIncrease10,000_160901_1743_40.csv', delimiter=',', dtype='int32')
+	# f = np.loadtxt('pjzsIncrease10,000_160901_1743_40.csv', delimiter=',', dtype='int32')
+	lst = [a,b,c,d]
+	marr = np.array([])	
+	stdarr = np.array([])
+
+	for item in lst:
+		t = item[:,1]
+		dt = t[1:] - t[0:-1]
+		m = np.mean(dt[0:dt.size-1])  
+		marr = np.append(marr,m)
+		std = np.sqrt(np.sum((dt - m)**2.)/(np.float(dt.size)-1.))
+		stdarr = np.append(stdarr, std)
+	x = np.arange(dt.max())
+	y = x
+	plt.plot(marr, stdarr, '-o')
+	plt.plot(x,y)
+	plt.title('Figure 6 Mean Interval for Chunks of 100 Events')
+	plt.xlabel('Start Index')
+	plt.ylabel('Mean Interval [Clock Ticks]')
+	plt.show()
+
+def figure14():
+	
 main(a)
