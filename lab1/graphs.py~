@@ -1,6 +1,9 @@
 import numpy as np
 import sys
 import matplotlib.pyplot as plt
+import scipy.misc as sc
+from scipy.interpolate import spline
+from scipy.optimize import curve_fit
 
 a = sys.argv
 
@@ -26,15 +29,11 @@ def main(a):
 	if '10' in a:
 		figure10()
 	if '11' in a:
-		figure11(lambda x:(1./x)*np.exp(-1.42e7/x))
-		# figure11(lambda x:-(1./-1.42e7)*np.exp(x/-1.42e7))				
-		# figure11()
+		figure11(lambda x,y:(1./x)*np.exp(-y/x))
 	if '12' in a:
-		figure12()
-	if '13' in a:
-		figure13()				
+		figure12()				
 	if '14' in a:
-		figure14()					
+		figure14(lambda x,y:(y**(x))*np.exp(-y)/(sc.factorial(x)))				
 
 
 def figure1():
@@ -217,7 +216,7 @@ def figure9():
 	plt.plot(binc,bincount,drawstyle='steps-mid', lw = 1.5)
 	x1,x2,y1,y2 = plt.axis()
 	plt.axis((x1,5e7,y1,2000))
-	plt.title('Figure 9 Frequency vs Interval')
+	#plt.title('Figure 9 Frequency vs Interval')
 	plt.xlabel('Interval [Ticks]')
 	plt.ylabel('Frequency')
 	plt.show()
@@ -248,7 +247,7 @@ def figure10():
 	plt.plot(binc,bincount,drawstyle='steps-mid', lw = 1.3)
 	x1,x2,y1,y2 = plt.axis()
 	plt.axis((x1,4000,y1,y2))
-	plt.title('Figure 9 Frequency vs Interval')
+	#plt.title('Figure 9 Frequency vs Interval')
 	plt.xlabel('Interval [Ticks]')
 	plt.ylabel('Frequency')
 	plt.show()
@@ -282,15 +281,23 @@ def figure11(maths):
 	#compute bin centers for plotting
 
 	binc = binl + 0.5*bw
-	y = maths(marr)	
-	plt.figure()
-
-	plt.plot(binc,bincount,drawstyle='steps-mid', lw = 1.3)
-	# plt.plot(binc, y)
-	x1,x2,y1,y2 = plt.axis()
-	plt.title('Figure 9 Frequency vs Interval')
+	y = maths(m,binc)*10000*bw
+	fig = plt.figure()
+	ax = fig.add_subplot(211)
+	ax.plot(binc,bincount,drawstyle='steps-mid', lw = 1.3)
+	ax.plot(binc, y)
+	ax.set_yscale('log')
 	plt.xlabel('Interval [Ticks]')
 	plt.ylabel('Frequency')
+	plt.xlim(0,1e8)
+
+	ax2 = fig.add_subplot(212)
+	ax2.plot(binc,bincount,drawstyle='steps-mid', lw = 1.3)
+	ax2.plot(binc, y)
+	plt.xlabel('Interval [Ticks]')
+	plt.ylabel('Frequency')
+	plt.subplots_adjust(hspace=0.2)
+
 	plt.show()
 
 def figure12():
@@ -308,19 +315,99 @@ def figure12():
 	for item in lst:
 		t = item[:,1]
 		dt = t[1:] - t[0:-1]
-		m = np.mean(dt[0:dt.size-1])  
+		count = 0
+		for interval in dt:
+			if interval < 4000:
+				dt = np.delete(dt, count)
+			else: count += 1	
+		m = np.mean(dt[0:dt.size-1]) 
 		marr = np.append(marr,m)
 		std = np.sqrt(np.sum((dt - m)**2.)/(np.float(dt.size)-1.))
 		stdarr = np.append(stdarr, std)
 	x = np.arange(dt.max())
 	y = x
-	plt.plot(marr, stdarr, '-o')
+	plt.plot(marr, stdarr, 'o')
 	plt.plot(x,y)
-	plt.title('Figure 6 Mean Interval for Chunks of 100 Events')
 	plt.xlabel('Start Index')
 	plt.ylabel('Mean Interval [Clock Ticks]')
 	plt.show()
 
-#def figure14():
+def figure14(pois):
+	x = np.loadtxt('pjzsIncrease10,000_160901_1743_40.csv', delimiter=',', dtype='int32')
+	t = x[:,1]
+	dt = t[1:] - t[0:-1]
+	#veto afterpulses!
+	wa = np.where(dt>4000)[0]
+	dt = dt[wa]
 	
+	#reconstruct time series without jumps
+	t1 = np.cumsum(dt)
+	t1 = t1[:2499]
+	fig = plt.figure()
+	ax = fig.add_subplot(311)
+	plt.plot(np.arange(2499),t1)
+	plt.xlim(0,3000)
+	plt.xlabel('Event Number')
+	plt.ylabel('Time [ticks]')
+
+
+	N = 1500
+	# define the lower and upper bin edges and bin width 
+	bw = (t1.max()-t1.min())/(N-1.)
+	binl = t1.min() + bw * np.arange(N)
+	
+	# define the array to hold the occurrence count
+	bincount = np.array([])# loop through the bins
+	index = 0;
+	for bin in binl:    
+		count = np.where((t1 >= bin) & (t1 < bin+bw))[0].size
+		bincount = np.append(bincount,count)
+	
+	#compute bin centers for plotting
+
+	binc = binl + 0.5*bw
+	ax2 = fig.add_subplot(312)
+	ax2.plot(binc, bincount, drawstyle='steps-mid', lw = 1.3)
+	plt.xlabel('Time [ticks]')
+	plt.ylabel('Counts per Bin')
+
+	xvals = np.arange(bincount.max()+1)
+	xvals2 = np.linspace(xvals.min(), xvals.max(), 100)
+
+	freq = np.arange(bincount.max()+1)
+	for bins in bincount:
+		freq[int(bins)] += 1
+
+	m = np.mean(bincount)
+	y = pois(np.arange(bincount.max()+1), m)
+	y = y*bincount.size
+
+	ax3 = fig.add_subplot(313)
+	ax3.plot(range(freq.size),freq, drawstyle='steps-mid', lw = 1.3)
+
+	#for very wrong poisson.
+	#xvals = np.arange((bincount.max()+1)*10.)
+	#m = np.mean(bincount)*10.
+	#y = pois(xvals, m)
+	#y = y*bincount.size*10
+	#ax3.plot(xvals/10., y, label=r'$\bar{x}$')
+
+	#for our poisson using integers
+	ax3.plot(xvals, y)
+
+	#For interpolated poisson
+	#power_smooth = spline(xvals, y, xvals2)
+	#ax3.plot(xvals2, power_smooth, label='$\bar{x}$')
+
+	#for real poisson
+	#parameters, cov_matrix = curve_fit(pois, range(freq.size), freq)
+	#ax3.plot(xvals2,pois(xvals2, *parameters)*bincount.size)
+
+	plt.xlabel('Counts per Bin')
+	plt.ylabel('Frequency')
+	#plt.ylim(0,600)
+	#plt.xlim(-1,9)
+	plt.subplots_adjust(hspace=0.2)
+	plt.show()
+
 main(a)
