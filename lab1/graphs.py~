@@ -317,7 +317,7 @@ def figure12():
 		dt = t[1:] - t[0:-1]
 		count = 0
 		for interval in dt:
-			if interval < 4000:
+			if interval < 10000:
 				dt = np.delete(dt, count)
 			else: count += 1	
 		m = np.mean(dt[0:dt.size-1]) 
@@ -405,8 +405,8 @@ def figure14(pois):
 
 	plt.xlabel('Counts per Bin')
 	plt.ylabel('Frequency')
-	#plt.ylim(0,600)
-	#plt.xlim(-1,9)
+	plt.ylim(0,600)
+	plt.xlim(-1,9)
 	plt.subplots_adjust(hspace=0.2)
 	plt.show()
 
