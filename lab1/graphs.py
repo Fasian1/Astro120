@@ -225,7 +225,8 @@ def figure10():
 	x = np.loadtxt('pjzsIncrease10,000_160901_1743_40.csv', delimiter=',', dtype='int32')
 	t = x[:,1]
 	dt = t[1:] - t[0:-1]
-	
+	count = 0
+
 	#New code, STAAAAAAAAAAAAAAAAART
 	N = 250
 	# define the lower and upper bin edges and bin width 
@@ -256,17 +257,26 @@ def figure11(maths):
 	x = np.loadtxt('pjzsIncrease10,000_160901_1743_40.csv', delimiter=',', dtype='int32')
 	t = x[:,1]
 	dt = t[1:] - t[0:-1]
-	m = np.mean(dt[0:dt.size-1])  
+	size = dt.size
+	print(dt.size)
+	for interval in dt:
+		if interval < 4000:
+			dt = np.delete(dt, interval)
+	print(dt.size)
+	print(size - dt.size)
+	mean = np.mean(dt[0:dt.size-1])  
+	print(mean)
 
-	marr = np.array([])
-	i = np.arange(dt.size)
-	for j in i:              
-		m = np.mean(dt[0:j])   
-		marr = np.append(marr,m)
+	# marr = np.array([])
+	# i = np.arange(dt.size-1)
+	# for j in i:              
+	# 	m = np.mean(dt[0:j])   
+	# 	marr = np.append(marr,m)
 
 	#New code, STAAAAAAAAAAAAAAAAART
 	N = 50
 	# define the lower and upper bin edges and bin width 
+	print(dt.min())
 	bw = (dt.max()-4000)/(N-1.)
 	binl = 4000 + bw * np.arange(N)
 	
@@ -280,7 +290,7 @@ def figure11(maths):
 	#compute bin centers for plotting
 
 	binc = binl + 0.5*bw
-	y = maths(m,binc)*10000*bw
+	y = maths(mean,binc)*dt.size*bw
 	fig = plt.figure()
 	ax = fig.add_subplot(211)
 	ax.plot(binc,bincount,drawstyle='steps-mid', lw = 1.3)
