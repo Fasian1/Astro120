@@ -40,9 +40,9 @@ def figure1():
 	x = np.loadtxt('pjzsIncrease10,000_160901_1743_40.csv', delimiter=',', dtype='int32')
 	t = x[:,1]
 	plt.plot(t)
-	plt.title('Figure 1: Time vs Event Number')	
-	plt.xlabel('Event Number')
-	plt.ylabel('Clock Tick')
+#	plt.title('Figure 1: Time vs Event Number')	
+	plt.xlabel('Event Number', fontsize=16)
+	plt.ylabel('Clock Tick',fontsize=16)
 	plt.show()
 
 def figure2():
@@ -50,9 +50,9 @@ def figure2():
 	t = x[:,1]
 	dt = t[1:] - t[0:-1]
 	plt.plot(dt)
-	plt.title('Figure 2: Interval vs Event Number')
-	plt.xlabel('Event Number')
-	plt.ylabel('Interval [Clock Tick]')
+#	plt.title('Figure 2: Interval vs Event Number')
+	plt.xlabel('Event Number', fontsize=16)
+	plt.ylabel('Interval [Clock Tick]', fontsize=16)
 	plt.show()
 
 def figure3():
@@ -60,9 +60,9 @@ def figure3():
 	t = x[:,1]
 	dt = t[1:] - t[0:-1]
 	plt.plot(dt,',')
-	plt.title('Figure 3 Interval vs Event Number (Dots)')
-	plt.xlabel('Event Number')
-	plt.ylabel('Interval [Clock Tick]')
+#	plt.title('Figure 3 Interval vs Event Number (Dots)')
+	plt.xlabel('Event Number', fontsize=16)
+	plt.ylabel('Interval [Clock Tick]', fontsize=16)
 	plt.show()
 
 def figure4():
@@ -79,9 +79,9 @@ def figure4():
 		steps = np.append(steps, j)
 
 	plt.plot(steps,marr,'o')
-	plt.title('Figure 4 Mean Interval for 10 Chunks of 1000 Events')
-	plt.xlabel('Start Index')
-	plt.ylabel('Mean Interval [Clock Ticks]')
+#	plt.title('Figure 4 Mean Interval for 10 Chunks of 1000 Events')
+	plt.xlabel('Start Index', fontsize=16)
+	plt.ylabel('Mean Interval [Clock Ticks]', fontsize=16)
 	plt.ticklabel_format(style='sci',axis='y',scilimits=(0,0))
 	plt.show()
 
@@ -98,11 +98,10 @@ def figure5():
 		m = np.mean(dt[0:j+nstep])   
 		marr = np.append(marr,m)
 		steps = np.append(steps, j)
-
 	plt.plot(steps,marr,'o')
-	plt.title('Figure 5 Mean Interval with increasing fractions of ')
-	plt.xlabel('Number of Intervals Averaged')
-	plt.ylabel('Mean Interval [Clock Ticks]')
+#	plt.title('Figure 5 Mean Interval with increasing fractions of ')
+	plt.xlabel('Number of Intervals Averaged', fontsize=16)
+	plt.ylabel('Mean Interval [Clock Ticks]', fontsize=16)
 	plt.ticklabel_format(style='sci',axis='y',scilimits=(0,0))
 	plt.show()
 
@@ -120,9 +119,9 @@ def figure6():
 		steps = np.append(steps, j)
 
 	plt.plot(steps,marr,'o')
-	plt.title('Figure 6 Mean Interval for Chunks of 100 Events')
-	plt.xlabel('Start Index')
-	plt.ylabel('Mean Interval [Clock Ticks]')
+#	plt.title('Figure 6 Mean Interval for Chunks of 100 Events')
+	plt.xlabel('Start Index', fontsize=16)
+	plt.ylabel('Mean Interval [Clock Ticks]', fontsize=16)
 	plt.ticklabel_format(style='sci',axis='y',scilimits=(0,0))
 	plt.show()
 
@@ -147,9 +146,9 @@ def figure7():
 	steps = steps[1:]
 	stdarr = stdarr[1:steps.size+1]
 	plt.plot(steps, stdarr,'o')
-	plt.title('Figure 6 Mean Interval for Chunks of 100 Events')
-	plt.xlabel('Start Index')
-	plt.ylabel('Mean Interval [Clock Ticks]')
+#	plt.title('Figure 6 Mean Interval for Chunks of 100 Events')
+	plt.xlabel('Start Index', fontsize=16)
+	plt.ylabel('Mean Interval [Clock Ticks]', fontsize=16)
 	plt.ticklabel_format(style='sci',axis='y',scilimits=(0,0))
 	plt.show()
 
@@ -182,9 +181,9 @@ def figure8():
 
 	plt.plot(steps, stdarr,'o')
 	plt.plot(linex,liney)
-	plt.title('Figure 6 Mean Interval for Chunks of 100 Events')
-	plt.xlabel('Start Index')
-	plt.ylabel('Mean Interval [Clock Ticks]')
+#	plt.title('Figure 6 Mean Interval for Chunks of 100 Events')
+	plt.xlabel('Start Index', fontsize=16)
+	plt.ylabel('Mean Interval [Clock Ticks]', fontsize=16)
 	plt.ticklabel_format(style='sci',axis='y',scilimits=(0,0))
 	plt.show()
 
@@ -216,9 +215,9 @@ def figure9():
 	plt.plot(binc,bincount,drawstyle='steps-mid', lw = 1.5)
 	x1,x2,y1,y2 = plt.axis()
 	plt.axis((x1,5e7,y1,2000))
-	#plt.title('Figure 9 Frequency vs Interval')
-	plt.xlabel('Interval [Ticks]')
-	plt.ylabel('Frequency')
+	##plt.title('Figure 9 Frequency vs Interval')
+	plt.xlabel('Interval [Ticks]', fontsize=16)
+	plt.ylabel('Frequency', fontsize=16)
 	plt.show()
 
 def figure10():
@@ -247,9 +246,9 @@ def figure10():
 	plt.plot(binc,bincount,drawstyle='steps-mid', lw = 1.3)
 	x1,x2,y1,y2 = plt.axis()
 	plt.axis((x1,4000,y1,y2))
-	#plt.title('Figure 9 Frequency vs Interval')
-	plt.xlabel('Interval [Ticks]')
-	plt.ylabel('Frequency')
+	##plt.title('Figure 9 Frequency vs Interval')
+	plt.xlabel('Interval [Ticks]', fontsize=16)
+	plt.ylabel('Frequency', fontsize=16)
 	plt.show()
 
 def figure11(maths):
@@ -287,15 +286,15 @@ def figure11(maths):
 	ax.plot(binc,bincount,drawstyle='steps-mid', lw = 1.3)
 	ax.plot(binc, y)
 	ax.set_yscale('log')
-	plt.xlabel('Interval [Ticks]')
-	plt.ylabel('Frequency')
+	plt.xlabel('Interval [Ticks]', fontsize=16)
+	plt.ylabel('Frequency', fontsize=16)
 	plt.xlim(0,1e8)
 
 	ax2 = fig.add_subplot(212)
 	ax2.plot(binc,bincount,drawstyle='steps-mid', lw = 1.3)
 	ax2.plot(binc, y)
-	plt.xlabel('Interval [Ticks]')
-	plt.ylabel('Frequency')
+	plt.xlabel('Interval [Ticks]', fontsize=16)
+	plt.ylabel('Frequency', fontsize=16)
 	plt.subplots_adjust(hspace=0.2)
 
 	plt.show()
@@ -328,8 +327,8 @@ def figure12():
 	y = x
 	plt.plot(marr, stdarr, 'o')
 	plt.plot(x,y)
-	plt.xlabel('Start Index')
-	plt.ylabel('Mean Interval [Clock Ticks]')
+	plt.xlabel('Start Index', fontsize=16)
+	plt.ylabel('Mean Interval [Clock Ticks]', fontsize=16)
 	plt.show()
 
 def figure14(pois):
@@ -347,8 +346,8 @@ def figure14(pois):
 	ax = fig.add_subplot(311)
 	plt.plot(np.arange(2499),t1)
 	plt.xlim(0,3000)
-	plt.xlabel('Event Number')
-	plt.ylabel('Time [ticks]')
+	plt.xlabel('Event Number', fontsize=16)
+	plt.ylabel('Time [ticks]', fontsize=16)
 
 
 	N = 1500
@@ -368,8 +367,8 @@ def figure14(pois):
 	binc = binl + 0.5*bw
 	ax2 = fig.add_subplot(312)
 	ax2.plot(binc, bincount, drawstyle='steps-mid', lw = 1.3)
-	plt.xlabel('Time [ticks]')
-	plt.ylabel('Counts per Bin')
+	plt.xlabel('Time [ticks]', fontsize=16)
+	plt.ylabel('Counts per Bin', fontsize=16)
 
 	xvals = np.arange(bincount.max()+1)
 	xvals2 = np.linspace(xvals.min(), xvals.max(), 100)
@@ -403,8 +402,8 @@ def figure14(pois):
 	#parameters, cov_matrix = curve_fit(pois, range(freq.size), freq)
 	#ax3.plot(xvals2,pois(xvals2, *parameters)*bincount.size)
 
-	plt.xlabel('Counts per Bin')
-	plt.ylabel('Frequency')
+	plt.xlabel('Counts per Bin', fontsize=16)
+	plt.ylabel('Frequency', fontsize=16)
 	plt.ylim(0,600)
 	plt.xlim(-1,9)
 	plt.subplots_adjust(hspace=0.2)
