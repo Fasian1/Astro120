@@ -23,11 +23,8 @@ def spectra(filename):
     #newmeandy = np.mean(newdy)
     #std = np.sqrt(np.sum((newdy - newmeandy)**2.)/(np.float(newdy.size)-1.))
 
-    
-
     cutoffdy = meandy + .3*std
     
-
     prev = 0
     first = 0
     potpeak = {}

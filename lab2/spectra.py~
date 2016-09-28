@@ -15,10 +15,10 @@ def spectra(filename):
     meandata = np.mean(data)
     std = np.sqrt(np.sum((absdy - meandy)**2.)/(np.float(absdy.size)-1.))
 
-    newdy = absdy[:]
-    for change in absdy:
-        if change > meandy*2:
-            newdy = np.delete(newdy, change)
+    #newdy = absdy[:]
+    #for change in absdy:
+    #    if change > meandy*2:
+    #        newdy = np.delete(newdy, change)
 
     #newmeandy = np.mean(newdy)
     #std = np.sqrt(np.sum((newdy - newmeandy)**2.)/(np.float(newdy.size)-1.))
