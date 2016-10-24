@@ -9,9 +9,9 @@ def flatfield(arg):
     directory = ''
 
     if(arg == "r"):
-        directory = "/home/data/Planet_Transit/flatfields/R_band/*"
+        directory = "/home/data/Planet_Transit/flatfields/R_band/r_flat_*"
     elif(arg == "v"):
-        directory = "/home/data/Planet_Transit/flatfields/V_band/*"
+        directory = "/home/data/Planet_Transit/flatfields/V_band/Vflat_*"
     else:
         print("no.")
         return
@@ -23,17 +23,25 @@ def flatfield(arg):
     pixely = []
     loader1 = pf.open(globbedFits[0])
     data1 = loader1[0].data
+    for fits in globbedFits:
+        loader = pf.open(fits)
+        data = loader[0].data
+        header = loader[0].header
+        mean = np.mean(data)
+        pixelx.append(mean)
+   
     for i in range(len(data1)):
         for j in range(len(data1[0])):
             for fits in globbedFits:
                 loader = pf.open(fits)
                 data = loader[0].data
-                header = loader[0].header
-                mean = np.mean(data)
+                #header = loader[0].header
                 pixely.append(data[i][j])
-                pixelx.append(mean)
+                print(pixely)
             slope = np.polyfit(pixelx, pixely, 1)
-            #slopes[i][j] = slope[0]
+            slopes[i][j] = slope[0]
+            pixely = []
+            pixelx = []
         print(slope)
     print(slopes)
 
