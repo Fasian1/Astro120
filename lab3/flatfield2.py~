@@ -29,7 +29,6 @@ def flatfield(arg):
         header = loader[0].header
         mean = np.mean(data)
         pixelx.append(mean)
-   
     for i in range(len(data1)):
         for j in range(len(data1[0])):
             for fits in globbedFits:
@@ -37,9 +36,14 @@ def flatfield(arg):
                 data = loader[0].data
                 #header = loader[0].header
                 pixely.append(data[i][j])
-            slope = np.polyfit(pixelx, pixely, 1)
-            slopes[i][j] = slope[0]
+            #slope = np.polyfit(pixelx, pixely, 1)
+            #slopes[i][j] = slope[0]
             pixely = []
+            #print(slopes)
+        print(slopes)
+    hdu = pyfits.PrimaryHDU(slopes)
+    hdulist = pyfits.HDUList([hdu])
+    hdulist.writeto("flatfield.fits")
     print(slopes)
 
 flatfield(arg)
