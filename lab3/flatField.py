@@ -25,12 +25,13 @@ def flatfield(arg):
         header = loader[0].header
         mean = np.mean(data)
         pixelvals = []
+        copy = np.add(copy, fits)
 #        for i in range(len(data)):
 #            for j in range(len(data[0])):
 #                pixelvals.append(data[i,j])
 #        meanval = sum(pixelvals)/(float)(len(pixelvals))
         ratio = data/mean
         lstRatios.append(ratio)
-        
+    
 
 flatfield(arg)

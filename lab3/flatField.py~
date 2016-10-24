@@ -17,17 +17,21 @@ def flatfield(arg):
         return
     globbedFits = glob(directory)
     flatfieldarray = np.array([])
+    copy = np.array([])
+    lstRatios = []
     for fits in globbedFits:
         loader = pf.open(fits)
         data = loader[0].data
         header = loader[0].header
         mean = np.mean(data)
         pixelvals = []
+        copy = np.add(copy, fits)
 #        for i in range(len(data)):
 #            for j in range(len(data[0])):
 #                pixelvals.append(data[i,j])
 #        meanval = sum(pixelvals)/(float)(len(pixelvals))
         ratio = data/mean
-        print(ratio)
+        lstRatios.append(ratio)
+    
 
 flatfield(arg)
