@@ -9,6 +9,8 @@ fig = plt.figure()
 path = sys.argv[1]
 globbed = glob(path)
 globbed.sort()
+print(globbed)
+
 globbed = globbed[:50]
 data = []
 i = 0
@@ -45,5 +47,5 @@ def updatefig(i):
 
 # animating it frame by frame. update fig updates the plot for however many frames.
 # interval is the number of miliseconds in between each update funciton call.
-ani = animation.FuncAnimation(fig, updatefig, frames=50, interval=100)
+ani = animation.FuncAnimation(fig, updatefig, frames=50, interval=50)
 plt.show()

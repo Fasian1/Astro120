@@ -16,7 +16,7 @@ def fits_load(path):
 
 
 def centroids():
-    data = glob('./Cordata/*')
+    data = glob('/home/sko/Cordata/*')
     data.sort()
     # datafix = np.arange(569).tolist()
     #
@@ -40,6 +40,19 @@ def centroids():
     #     y = maxPix // 2004
     #     addme = np.array((x, y))
     #     brightpoints.append(addme)
+    ######################################################
+    # for path2 in data:
+    #     hdu_list = pf.open(path2)
+    #     img = hdu_list[0].data
+    #     median = np.median(img)
+    #     img = img - median
+    #     for i in range(len(img)):
+    #         for j in range(len(img[0])):
+    #             if img[i][j] < 0:
+    #                 img[i][j] = 0
+    #     # hdu_list.writeto("Med"+path2[-9:])
+    #     print(img)
+
 
     brightpoints = []
     for path in data:
@@ -82,9 +95,8 @@ def centroids():
             isum.append(pointshalf[j][2])
         CX = np.sum(xsum) / np.sum(isum)
         CY = np.sum(ysum) / np.sum(isum)
-        cent = np.array((CX, CY))
+        cent = np.array((CY, CX))
         allcents.append(cent)
-        print("looping")
     hdu = pf.PrimaryHDU(allcents)
     hdulist = pf.HDUList([hdu])
     hdulist.writeto("allcents.fits")
