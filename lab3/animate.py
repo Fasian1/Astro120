@@ -6,12 +6,14 @@ import sys
 
 
 fig = plt.figure()
+ax = plt.gca()
+time_text = ax.text(5, 5,'')
+
 path = sys.argv[1]
 globbed = glob(path)
 globbed.sort()
-print(globbed)
-
-globbed = globbed[:50]
+#
+# globbed = globbed[505:510]
 data = []
 i = 0
 
@@ -37,15 +39,17 @@ def f(i):
 
 
 i = 0
-im = plt.imshow(f(i), cmap='gray_r', animated=True)
+im = plt.imshow(f(i), origin='upper', vmin=0, vmax=1000, cmap='gray_r', animated=True)
 
 
 def updatefig(i):
     im.set_array(f(i))
+    time_text.set_text(str(i))
+    print(globbed[i])
     return im,
 
 
 # animating it frame by frame. update fig updates the plot for however many frames.
 # interval is the number of miliseconds in between each update funciton call.
-ani = animation.FuncAnimation(fig, updatefig, frames=50, interval=50)
+ani = animation.FuncAnimation(fig, updatefig, frames=len(globbed), interval=1)
 plt.show()
